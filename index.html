@@ -12,6 +12,16 @@
     <div id="tableId">Table: —</div>
   </header>
 
+  <section class="category-buttons" id="categoryFilters">
+    <button data-category="All">All</button>
+    <button data-category="Appetizers">Appetizers</button>
+    <button data-category="Pizzeria">Pizzeria</button>
+    <button data-category="Cold Brews">Cold Brews</button>
+    <button data-category="Beverages">Beverages</button>
+    <button data-category="Main Course">Main Course</button>
+    <button data-category="Desserts">Desserts</button>
+  </section>
+
   <main>
     <div class="menu-grid" id="menuGrid"></div>
   </main>
@@ -23,57 +33,73 @@
 
   <script>
     const menuItems = [
-      { name: "Cold Coffee", price: 80, img: "https://source.unsplash.com/featured/?cold-coffee" },
-      { name: "Hot Coffee", price: 60, img: "https://source.unsplash.com/featured/?hot-coffee" },
-      { name: "Lassi", price: 50, img: "https://source.unsplash.com/featured/?lassi" },
-      { name: "Mojito", price: 70, img: "https://source.unsplash.com/featured/?mojito" },
-      { name: "French Fries", price: 90, img: "https://source.unsplash.com/featured/?fries" },
-      { name: "Veg Sandwich", price: 85, img: "https://source.unsplash.com/featured/?sandwich" },
-      { name: "Cheese Sandwich", price: 110, img: "https://source.unsplash.com/featured/?cheese-sandwich" },
-      { name: "Maggie", price: 60, img: "https://source.unsplash.com/featured/?maggie" },
-      { name: "Egg Maggie", price: 80, img: "https://source.unsplash.com/featured/?egg-noodles" },
-      { name: "Oreo Shake", price: 100, img: "https://source.unsplash.com/featured/?oreo-shake" }
+      { name: "Cold Coffee", price: 80, img: "images/cold-coffee.jpg", category: "Cold Brews" },
+      { name: "Filter Coffee", price: 60, img: "images/filter-coffee.jpg", category: "Beverages" },
+      { name: "Mango Lassi", price: 50, img: "images/mango-lassi.jpg", category: "Beverages" },
+      { name: "Mojito", price: 70, img: "images/mojito.jpg", category: "Beverages" },
+      { name: "French Fries", price: 90, img: "images/french-fries.jpg", category: "Appetizers" },
+      { name: "Cheese Sandwich", price: 110, img: "images/cheese-sandwich.jpg", category: "Appetizers" },
+      { name: "Paneer Wrap", price: 110, img: "images/wrap.jpg", category: "Appetizers" },
+      { name: "Maggie", price: 60, img: "images/maggi.jpg", category: "Main Course" },
+      { name: "Oreo Shake", price: 100, img: "images/oreo-shake.jpg", category: "Desserts" }
+
     ];
 
     const cart = {};
-    const menuGrid = document.getElementById('menuGrid');
+    const tableNum = "—"; // Replace this with actual dynamic table ID logic if needed
 
-    function updateCartDisplay() {
-      const summary = Object.entries(cart).map(([idx, qty]) => {
-        const item = menuItems[idx];
-        return qty > 0 ? `${qty} × ${item.name}` : null;
-      }).filter(Boolean).join(', ');
-      document.getElementById('orderSummary').textContent = summary || 'No items added yet.';
+    function updateQty(idx, delta) {
+      cart[idx] = (cart[idx] || 0) + delta;
+      if (cart[idx] < 0) cart[idx] = 0;
+      document.getElementById(`qty-${idx}`).innerText = cart[idx];
+      updateOrderSummary();
     }
 
-    menuItems.forEach((item, index) => {
-      const div = document.createElement('div');
-      div.className = 'menu-item';
-      div.innerHTML = `
-        <img src="${item.img}" alt="${item.name}" />
-        <h3>${item.name}</h3>
-        <p>₹${item.price}</p>
-        <div class="qty-controls">
-          <button onclick="updateQty(${index}, -1)">−</button>
-          <span id="qty-${index}">0</span>
-          <button onclick="updateQty(${index}, 1)">+</button>
-        </div>
-      `;
-      menuGrid.appendChild(div);
-      cart[index] = 0;
+    function updateOrderSummary() {
+      let summary = '';
+      let total = 0;
+      for (const [idx, qty] of Object.entries(cart)) {
+        if (qty > 0) {
+          const item = menuItems[idx];
+          summary += `${qty} × ${item.name} = ₹${item.price * qty}\n`;
+          total += item.price * qty;
+        }
+      }
+      document.getElementById('orderSummary').innerText = summary || 'No items added yet.';
+    }
+
+    function renderMenu(category = "All") {
+      const grid = document.getElementById("menuGrid");
+      grid.innerHTML = "";
+      const filtered = category === "All"
+        ? menuItems
+        : menuItems.filter(item => item.category === category);
+
+      filtered.forEach((item, idx) => {
+        const div = document.createElement("div");
+        div.className = "menu-item";
+        div.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <h3>${item.name}</h3>
+          <p>₹${item.price}</p>
+          <div class="qty-controls">
+            <button onclick="updateQty(${idx}, -1)">–</button>
+            <span id="qty-${idx}">${cart[idx] || 0}</span>
+            <button onclick="updateQty(${idx}, 1)">+</button>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    // Category filter listeners
+    document.querySelectorAll("#categoryFilters button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        renderMenu(btn.dataset.category);
+      });
     });
 
-    function updateQty(index, change) {
-      cart[index] = Math.max(0, cart[index] + change);
-      document.getElementById(`qty-${index}`).textContent = cart[index];
-      updateCartDisplay();
-    }
-
-    // Table number from URL
-    const tableParams = new URLSearchParams(window.location.search);
-    const tableNum = tableParams.get('table') || '—';
-    document.getElementById('tableId').textContent = 'Table: ' + tableNum;
-
+    // Order submit handler
     document.getElementById('submitOrder').addEventListener('click', () => {
       const lines = [];
       let total = 0;
@@ -109,9 +135,10 @@
       ctx.font = '16px sans-serif';
       const lineHeight = 24;
       const padding = 20;
-      const linesArr = summaryText.split('\n');
+      const linesArr = summaryText.split('\\n');
       canvas.width = 450;
       canvas.height = padding * 2 + linesArr.length * lineHeight;
+
       ctx.fillStyle = '#fff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = '#000';
@@ -122,9 +149,12 @@
       const imageDataUrl = canvas.toDataURL('image/png');
       const imageWindow = window.open();
       imageWindow.document.write(`<p>🧾 Screenshot or long-press to save, then send via WhatsApp manually:</p>`);
-      imageWindow.document.write(`<img src="${imageDataUrl}" style="max-width:100%">`);
-      imageWindow.document.write(`<p><a href="https://wa.me/919036120124?text=${encodeURIComponent('🧾 Please find attached the order from Table ' + tableNum)}" target="_blank">Click to Open WhatsApp Chat</a></p>`);
+      imageWindow.document.write(`<img src=\"${imageDataUrl}\" style=\"max-width:100%\">`);
+      imageWindow.document.write(`<p><a href=\"https://wa.me/919036120124?text=${encodeURIComponent('🧾 Please find attached the order from Table ' + tableNum)}\" target=\"_blank\">Click to Open WhatsApp Chat</a></p>`);
     });
+
+    // Initial menu render
+    renderMenu();
   </script>
 </body>
 </html>

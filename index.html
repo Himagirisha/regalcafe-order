@@ -101,11 +101,11 @@
       }
       if (!lines.length) return alert('Please add items to your order.');
 
-      const msg = `New order from Table ${tableNum}%0A` +
-                  lines.join('%0A') +
-                  `%0ATotal: ₹${total}`;
-      const waLink = `https://wa.me/919606281293?text=${msg}`;
-      window.location = waLink;
+      const msg = `New order from Table ${tableNum}\n` +
+            lines.join('\n') +
+            `\nTotal: ₹${total}`;
+        const waLink = `https://wa.me/919606281288?text=${encodeURIComponent(msg)}`;
+        window.location = waLink;
     });
 
     renderMenu();

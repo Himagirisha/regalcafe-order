@@ -44,7 +44,11 @@
     ];
   
     const cart = {};
-    const tableNum = "—"; // Placeholder
+  
+    // Read table number from URL (e.g., ?table=3)
+    const urlParams = new URLSearchParams(window.location.search);
+    const tableNum = urlParams.get('table') || '—';
+    document.getElementById("tableId").innerText = `Table: ${tableNum}`;
   
     function updateQty(itemKey, delta) {
       cart[itemKey] = (cart[itemKey] || 0) + delta;
@@ -74,7 +78,7 @@
         : menuItems.filter(item => item.category === category);
   
       filtered.forEach(item => {
-        const itemKey = menuItems.indexOf(item); // Preserve global index
+        const itemKey = menuItems.indexOf(item); // Keep global index
         const div = document.createElement("div");
         div.className = "menu-item";
         div.innerHTML = `
@@ -91,7 +95,6 @@
       });
     }
   
-    // Category filter listeners
     document.querySelectorAll("#categoryFilters button").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll("#categoryFilters button").forEach(b => b.classList.remove("active"));
@@ -100,7 +103,6 @@
       });
     });
   
-    // Order submit handler
     document.getElementById('submitOrder').addEventListener('click', () => {
       const lines = [];
       let total = 0;
@@ -129,24 +131,20 @@
         lines.join('\n') +
         `\n\n💰 Total: ₹${total}\n🗓️ Order placed on: ${formattedTime}`;
   
-      // Open stylized popup
       const w = window.open("", "_blank", "width=400,height=600");
       w.document.write(`
         <style>
           body { font-family: sans-serif; background: #f8f8f8; padding: 20px; color: #111; }
           pre { white-space: pre-wrap; background: #fff; border: 1px solid #ccc; padding: 12px; border-radius: 8px; }
-          button { margin-top: 10px; padding: 8px 16px; border: none; background: #25d366; color: white; font-size: 1rem; border-radius: 6px; cursor: pointer; }
-          a { display: block; margin-top: 10px; text-decoration: none; color: #25d366; font-weight: bold; }
+          a.button { display: block; margin-top: 15px; background: #25d366; color: white; padding: 10px 20px; text-align: center; border-radius: 8px; font-size: 16px; text-decoration: none; }
         </style>
         <h2>Order Summary</h2>
         <pre>${summaryText}</pre>
-        <button onclick="navigator.clipboard.writeText(document.querySelector('pre').innerText)">📋 Copy Order</button>
-        <a href="https://wa.me/919036120124?text=${encodeURIComponent(summaryText)}" target="_blank">📲 Send via WhatsApp</a>
+        <a class="button" href="https://wa.me/919036120124?text=${encodeURIComponent(summaryText)}" target="_blank">📲 Send via WhatsApp</a>
       `);
     });
   
     renderMenu();
-  </script>
-  
+  </script>  
 </body>
 </html>

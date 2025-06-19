@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Regal Café – Scan to Order</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header>
@@ -22,6 +22,58 @@
   </footer>
 
   <script>
+    const menuItems = [
+      { name: "Cold Coffee", price: 80, img: "https://source.unsplash.com/featured/?cold-coffee" },
+      { name: "Hot Coffee", price: 60, img: "https://source.unsplash.com/featured/?hot-coffee" },
+      { name: "Lassi", price: 50, img: "https://source.unsplash.com/featured/?lassi" },
+      { name: "Mojito", price: 70, img: "https://source.unsplash.com/featured/?mojito" },
+      { name: "French Fries", price: 90, img: "https://source.unsplash.com/featured/?fries" },
+      { name: "Veg Sandwich", price: 85, img: "https://source.unsplash.com/featured/?sandwich" },
+      { name: "Cheese Sandwich", price: 110, img: "https://source.unsplash.com/featured/?cheese-sandwich" },
+      { name: "Maggie", price: 60, img: "https://source.unsplash.com/featured/?maggie" },
+      { name: "Egg Maggie", price: 80, img: "https://source.unsplash.com/featured/?egg-noodles" },
+      { name: "Oreo Shake", price: 100, img: "https://source.unsplash.com/featured/?oreo-shake" }
+    ];
+
+    const cart = {};
+    const menuGrid = document.getElementById('menuGrid');
+
+    function updateCartDisplay() {
+      const summary = Object.entries(cart).map(([idx, qty]) => {
+        const item = menuItems[idx];
+        return qty > 0 ? `${qty} × ${item.name}` : null;
+      }).filter(Boolean).join(', ');
+      document.getElementById('orderSummary').textContent = summary || 'No items added yet.';
+    }
+
+    menuItems.forEach((item, index) => {
+      const div = document.createElement('div');
+      div.className = 'menu-item';
+      div.innerHTML = `
+        <img src="${item.img}" alt="${item.name}" />
+        <h3>${item.name}</h3>
+        <p>₹${item.price}</p>
+        <div class="qty-controls">
+          <button onclick="updateQty(${index}, -1)">−</button>
+          <span id="qty-${index}">0</span>
+          <button onclick="updateQty(${index}, 1)">+</button>
+        </div>
+      `;
+      menuGrid.appendChild(div);
+      cart[index] = 0;
+    });
+
+    function updateQty(index, change) {
+      cart[index] = Math.max(0, cart[index] + change);
+      document.getElementById(`qty-${index}`).textContent = cart[index];
+      updateCartDisplay();
+    }
+
+    // Table number from URL
+    const tableParams = new URLSearchParams(window.location.search);
+    const tableNum = tableParams.get('table') || '—';
+    document.getElementById('tableId').textContent = 'Table: ' + tableNum;
+
     document.getElementById('submitOrder').addEventListener('click', () => {
       const lines = [];
       let total = 0;
@@ -32,9 +84,9 @@
           total += item.price * qty;
         }
       }
-    
+
       if (!lines.length) return alert('Please add items to your order.');
-    
+
       const now = new Date();
       const formattedTime = now.toLocaleString('en-IN', {
         hour: 'numeric',
@@ -44,15 +96,14 @@
         month: 'short',
         year: 'numeric'
       });
-    
+
       const summaryText =
         `🛎 Order from Regal Café\n` +
         `📍 Table: ${tableNum}\n\n` +
         lines.join('\n') +
         `\n\n💰 Total: ₹${total}` +
         `\n🗓️ Order placed on: ${formattedTime}`;
-    
-      // Create canvas image
+
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       ctx.font = '16px sans-serif';
@@ -61,26 +112,19 @@
       const linesArr = summaryText.split('\n');
       canvas.width = 450;
       canvas.height = padding * 2 + linesArr.length * lineHeight;
-    
-      // Draw background
       ctx.fillStyle = '#fff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-      // Draw text
       ctx.fillStyle = '#000';
       linesArr.forEach((line, i) => {
         ctx.fillText(line, padding, padding + (i + 1) * lineHeight);
       });
-    
-      // Convert to image
+
       const imageDataUrl = canvas.toDataURL('image/png');
-    
-      // Upload prompt
       const imageWindow = window.open();
       imageWindow.document.write(`<p>🧾 Screenshot or long-press to save, then send via WhatsApp manually:</p>`);
       imageWindow.document.write(`<img src="${imageDataUrl}" style="max-width:100%">`);
       imageWindow.document.write(`<p><a href="https://wa.me/919036120124?text=${encodeURIComponent('🧾 Please find attached the order from Table ' + tableNum)}" target="_blank">Click to Open WhatsApp Chat</a></p>`);
     });
-    </script>    
+  </script>
 </body>
 </html>

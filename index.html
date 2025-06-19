@@ -22,93 +22,65 @@
   </footer>
 
   <script>
-    // 1️⃣ Parse table number from URL '?table=X'
-    const params = new URLSearchParams(window.location.search);
-    const tableNum = params.get('table') || '—';
-    document.getElementById('tableId').innerText = 'Table: ' + tableNum;
-
-    // 2️⃣ Sample menu items
-    const menuItems = [
-      { name: 'Masala Dosa', desc: 'Crispy rice crepe with potato masala', price: 120, img: 'images/masala-dosa.jpg' },
-      { name: 'Chai/Tea', desc: 'Cardamom-spiced tea', price: 30, img: 'images/tea.jpg' },
-      { name: 'Filter Coffee', desc: 'South-style strong coffee', price: 40, img: 'images/filter-coffee.jpg' },
-      { name: 'Veg Sandwich', desc: 'Multigrain bread, veggies & cheese', price: 100, img: 'images/sandwich.jpg' },
-      { name: 'Samosa (2 pcs)', desc: 'Crisp pastry filled with spiced potato', price: 50, img: 'images/samosa.jpg' },
-      { name: 'Paneer Wrap', desc: 'Grilled paneer & veggies in wrap', price: 150, img: 'images/wrap.jpg' },
-      { name: 'Cold Coffee', desc: 'Iced coffee with ice cream & syrup', price: 120, img: 'images/cold-coffee.jpg' },
-    ];
-
-    // 3️⃣ State
-    const cart = {};
-
-    const menuGrid = document.getElementById('menuGrid');
-    const orderSummary = document.getElementById('orderSummary');
-
-    function renderMenu() {
-      menuItems.forEach((item, idx) => {
-        const div = document.createElement('div');
-        div.className = 'menu-item';
-        div.innerHTML = `
-          <img src="${item.img}" alt="${item.name}">
-          <h3>${item.name} — ₹${item.price}</h3>
-          <p>${item.desc}</p>
-          <div class="qty-controls">
-            <button data-idx="${idx}" data-op="sub">–</button>
-            <span id="qty${idx}">0</span>
-            <button data-idx="${idx}" data-op="add">+</button>
-          </div>`;
-        menuGrid.appendChild(div);
-      });
-
-      menuGrid.querySelectorAll('button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const idx = btn.dataset.idx;
-          const op = btn.dataset.op;
-          cart[idx] = cart[idx] || 0;
-          cart[idx] = op === 'add' ? cart[idx] + 1 : Math.max(cart[idx] - 1, 0);
-          document.getElementById('qty' + idx).innerText = cart[idx];
-          updateSummary();
-        });
-      });
-    }
-
-    function updateSummary() {
-      const lines = [];
-      let total = 0;
-      for (const [idx, qty] of Object.entries(cart)) {
-        if (qty > 0) {
-          const item = menuItems[idx];
-          lines.push(`${qty} × ${item.name} (₹${item.price * qty})`);
-          total += item.price * qty;
-        }
-      }
-      if (lines.length) {
-        orderSummary.innerText = lines.join('\n') + `\nTotal: ₹${total}`;
-      } else {
-        orderSummary.innerText = 'No items added yet.';
-      }
-    }
-
     document.getElementById('submitOrder').addEventListener('click', () => {
       const lines = [];
       let total = 0;
       for (const [idx, qty] of Object.entries(cart)) {
         if (qty > 0) {
           const item = menuItems[idx];
-          lines.push(`${qty}×${item.name}`);
+          lines.push(`${qty} × ${item.name} — ₹${item.price * qty}`);
           total += item.price * qty;
         }
       }
+    
       if (!lines.length) return alert('Please add items to your order.');
-
-      const msg = `New order from Table ${tableNum}\n` +
-            lines.join('\n') +
-            `\nTotal: ₹${total}`;
-        const waLink = `https://wa.me/919606281293?text=${encodeURIComponent(msg)}`;
-        window.location = waLink;
+    
+      const now = new Date();
+      const formattedTime = now.toLocaleString('en-IN', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+    
+      const summaryText =
+        `🛎 Order from Regal Café\n` +
+        `📍 Table: ${tableNum}\n\n` +
+        lines.join('\n') +
+        `\n\n💰 Total: ₹${total}` +
+        `\n🗓️ Order placed on: ${formattedTime}`;
+    
+      // Create canvas image
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.font = '16px sans-serif';
+      const lineHeight = 24;
+      const padding = 20;
+      const linesArr = summaryText.split('\n');
+      canvas.width = 450;
+      canvas.height = padding * 2 + linesArr.length * lineHeight;
+    
+      // Draw background
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+      // Draw text
+      ctx.fillStyle = '#000';
+      linesArr.forEach((line, i) => {
+        ctx.fillText(line, padding, padding + (i + 1) * lineHeight);
+      });
+    
+      // Convert to image
+      const imageDataUrl = canvas.toDataURL('image/png');
+    
+      // Upload prompt
+      const imageWindow = window.open();
+      imageWindow.document.write(`<p>🧾 Screenshot or long-press to save, then send via WhatsApp manually:</p>`);
+      imageWindow.document.write(`<img src="${imageDataUrl}" style="max-width:100%">`);
+      imageWindow.document.write(`<p><a href="https://wa.me/919036120124?text=${encodeURIComponent('🧾 Please find attached the order from Table ' + tableNum)}" target="_blank">Click to Open WhatsApp Chat</a></p>`);
     });
-
-    renderMenu();
-  </script>
+    </script>    
 </body>
 </html>

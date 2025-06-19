@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Regal Café – Scan to Order</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Regal Café ☕</h1>
+    <div id="tableId">Table: —</div>
+  </header>
+
+  <main>
+    <div class="menu-grid" id="menuGrid"></div>
+  </main>
+
+  <footer>
+    <div id="orderSummary">No items added yet.</div>
+    <button id="submitOrder">Submit Order via WhatsApp</button>
+  </footer>
+
+  <script>
+    // 1️⃣ Parse table number from URL '?table=X'
+    const params = new URLSearchParams(window.location.search);
+    const tableNum = params.get('table') || '—';
+    document.getElementById('tableId').innerText = 'Table: ' + tableNum;
+
+    // 2️⃣ Sample menu items
+    const menuItems = [
+      { name: 'Masala Dosa', desc: 'Crispy rice crepe with potato masala', price: 120, img: 'images/masala-dosa.jpg' },
+      { name: 'Chai/Tea', desc: 'Cardamom-spiced tea', price: 30, img: 'images/tea.jpg' },
+      { name: 'Filter Coffee', desc: 'South-style strong coffee', price: 40, img: 'images/filter-coffee.jpg' },
+      { name: 'Veg Sandwich', desc: 'Multigrain bread, veggies & cheese', price: 100, img: 'images/sandwich.jpg' },
+      { name: 'Samosa (2 pcs)', desc: 'Crisp pastry filled with spiced potato', price: 50, img: 'images/samosa.jpg' },
+      { name: 'Paneer Wrap', desc: 'Grilled paneer & veggies in wrap', price: 150, img: 'images/wrap.jpg' },
+      { name: 'Cold Coffee', desc: 'Iced coffee with ice cream & syrup', price: 120, img: 'images/cold-coffee.jpg' },
+    ];
+
+    // 3️⃣ State
+    const cart = {};
+
+    const menuGrid = document.getElementById('menuGrid');
+    const orderSummary = document.getElementById('orderSummary');
+
+    function renderMenu() {
+      menuItems.forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'menu-item';
+        div.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <h3>${item.name} — ₹${item.price}</h3>
+          <p>${item.desc}</p>
+          <div class="qty-controls">
+            <button data-idx="${idx}" data-op="sub">–</button>
+            <span id="qty${idx}">0</span>
+            <button data-idx="${idx}" data-op="add">+</button>
+          </div>`;
+        menuGrid.appendChild(div);
+      });
+
+      menuGrid.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = btn.dataset.idx;
+          const op = btn.dataset.op;
+          cart[idx] = cart[idx] || 0;
+          cart[idx] = op === 'add' ? cart[idx] + 1 : Math.max(cart[idx] - 1, 0);
+          document.getElementById('qty' + idx).innerText = cart[idx];
+          updateSummary();
+        });
+      });
+    }
+
+    function updateSummary() {
+      const lines = [];
+      let total = 0;
+      for (const [idx, qty] of Object.entries(cart)) {
+        if (qty > 0) {
+          const item = menuItems[idx];
+          lines.push(`${qty} × ${item.name} (₹${item.price * qty})`);
+          total += item.price * qty;
+        }
+      }
+      if (lines.length) {
+        orderSummary.innerText = lines.join('\n') + `\nTotal: ₹${total}`;
+      } else {
+        orderSummary.innerText = 'No items added yet.';
+      }
+    }
+
+    document.getElementById('submitOrder').addEventListener('click', () => {
+      const lines = [];
+      let total = 0;
+      for (const [idx, qty] of Object.entries(cart)) {
+        if (qty > 0) {
+          const item = menuItems[idx];
+          lines.push(`${qty}×${item.name}`);
+          total += item.price * qty;
+        }
+      }
+      if (!lines.length) return alert('Please add items to your order.');
+
+      const msg = `New order from Table ${tableNum}%0A` +
+                  lines.join('%0A') +
+                  `%0ATotal: ₹${total}`;
+      const waLink = `https://wa.me/91YOURNUMBER?text=${msg}`;
+      window.location = waLink;
+    });
+
+    renderMenu();
+  </script>
+</body>
+</html>

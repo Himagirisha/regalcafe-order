@@ -42,13 +42,14 @@ header h1 {
 .category-buttons button {
   background-color: #333;
   color: #f5f5f5;
-  border: 1px solid #444;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  font-size: 0.95rem;
+  border: 2px solid #f5c842;
+  padding: 0.8rem 1.6rem;
+  border-radius: 10px;
+  font-size: 1.05rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
+
 
 .category-buttons button:hover,
 .category-buttons button.active {
@@ -121,15 +122,15 @@ header h1 {
 }
 
 footer {
-  background: #111;
-  padding: 1rem 1rem 2rem;
-  border-top: 1px solid #333;
-  position: sticky;
+  position: fixed;
   bottom: 0;
+  width: 100%;
+  background: #111;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  z-index: 10;
+  padding: 10px;
+  z-index: 1000;
 }
 
 #orderSummary {
@@ -141,17 +142,17 @@ footer {
 }
 
 #submitOrder {
-  background: #f5c842;
-  color: #111;
+  display: none;
+  background-color: #ffc107;
+  color: #000;
+  font-weight: bold;
   border: none;
-  padding: 0.6rem 1.2rem;
+  padding: 12px 20px;
   border-radius: 8px;
-  font-size: 1rem;
   cursor: pointer;
-  font-weight: 600;
-  transition: background 0.3s ease;
+  margin: 20px;
+  font-size: 1.1rem;
 }
-
 #submitOrder:hover {
   background: #ffd700;
 }

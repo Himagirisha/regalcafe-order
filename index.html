@@ -2,201 +2,186 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Regal Café – Scan to Order</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Regal Cafe - Scan to Order</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <header>
-    <h1>Regal Café ☕</h1>
-    <div id="tableId">Table: —</div>
+    <h1>Regal Cafe</h1>
+    <div id="tableId"></div>
   </header>
 
-  <section class="category-buttons" id="categoryFilters">
-    <button data-category="All">All</button>
-    <button data-category="Appetizers">Appetizers</button>
-    <button data-category="Pizzeria">Pizzeria</button>
-    <button data-category="Cold Brews">Cold Brews</button>
-    <button data-category="Beverages">Beverages</button>
-    <button data-category="Main Course">Main Course</button>
-    <button data-category="Desserts">Desserts</button>
-    <button data-category="Soups">Desserts</button>
-    <button data-category="Icecreams">Icecreams(Scoops)</button>
-  </section>
+  <div class="category-buttons" id="categoryButtons"></div>
 
-  <main>
-    <div class="menu-grid" id="menuGrid"></div>
-  </main>
+  <main id="menu" class="menu-grid"></main>
 
   <footer>
-    <div id="orderSummary">No items added yet.</div>
-    <button id="submitOrder">Submit Order via WhatsApp</button>
+    <div id="orderSummary"></div>
+    <button id="submitOrder">Send via WhatsApp</button>
   </footer>
+
   <script>
-    const menuItems = [
-      { name: "Cold Coffee", price: 80, img: "images/cold-coffee.jpg", category: "Cold Brews" },
-      { name: "Iced Chocolate Coffee", price: 80, img: "images/choco-coffee.jpg", category: "Cold Brews" },
-      { name: "Mango Smoothie", price: 50, img: "images/mango-smoothie.jpg", category: "Beverages" },
-      { name: "Pineapple Smoothie", price: 50, img: "images/pineapple-smoothie.jpg", category: "Beverages" },
-      { name: "Lime Soda", price: 50, img: "images/lime-soda.jpg", category: "Beverages" },
-      { name: "Black Currant Smoothie", price: 50, img: "images/blackcurrant-smoothie.jpg", category: "Beverages" },
-      { name: "Margherita Pizza", price: 50, img: "images/margherita-pizza.jpg", category: "Pizzeria" },
-      { name: "Sweet Corn Pizza", price: 50, img: "images/sweetcorn-pizza.jpg", category: "Pizzeria" },
-      { name: "Peri Peri Chicken Pizza", price: 50, img: "images/perichicken-pizza.jpg", category: "Pizzeria" },
-      { name: "Peri Peri Paneer Pizza", price: 50, img: "images/paneer-pizza.jpg", category: "Pizzeria" },
-      { name: "mediterranean Pizza", price: 50, img: "images/mediterranean-pizza.jpg", category: "Pizzeria" },
-      { name: "Mojito", price: 70, img: "images/mojito.jpg", category: "Beverages" },
-      { name: "French Fries", price: 90, img: "images/french-fries.jpg", category: "Appetizers" },
-      { name: "Peri Peri French Fries", price: 90, img: "images/french-fries.jpg", category: "Appetizers" },
-      { name: "Cottage Cheese Paneer Sandwich", price: 110, img: "images/paneer-sandwich.jpg", category: "Appetizers" },
-      { name: "Oreo Shake", price: 100, img: "images/oreo-shake.jpg", category: "Cold Brews" },
-      { name: "CLubhouse Sandwich", price: 110, img: "images/club-sandwich.jpg", category: "Appetizers" },
-      { name: "Regal Sandwich", price: 110, img: "images/regal-sandwich.jpg", category: "Appetizers" },
-
-      { name: "Samosa(6pcs)", price: 110, img: "images/samosa.jpg", category: "Appetizers" },
-      { name: "Jalapeño Cheese Samosa(6pcs)", price: 110, img: "images/jalapeno-samosa.jpg", category: "Appetizers" },
-      { name: "Chicken Cheese Samosa(6pcs)", price: 110, img: "images/chicken-samosa.jpg", category: "Appetizers" },
-      
-      { name: "Roasted Pumpkin Coconut Soup", price: 60, img: "images/pumpkin-soup.jpg", category: "Soups" },
-      { name: "Cream Broccoli Soup", price: 60, img: "images/broccoli-soup.jpg", category: "Soups" },
-      { name: "Hot & Sour Soup(Veg)", price: 60, img: "images/hotsour-soup.jpg", category: "Soups" },
-      { name: "Hot & Sour Soup(Non-Veg)", price: 60, img: "images/hotsour-soup.jpg", category: "Soups" },
-      { name: "Manchow Soup(Veg)", price: 60, img: "images/manchow-soup.jpg", category: "Soups" },
-      { name: "Manchow Soup(Non-Veg)", price: 60, img: "images/manchow-soup.jpg", category: "Soups" },
-
+    const categories = {
+      "Appetizers": [
+        { name: "Chicken Nuggets", img: "images/chicken-nuggets.jpg" },
+        { name: "Potato Wedges", img: "images/potato-wedges.jpg" },
+        { name: "Veg Nuggets", img: "images/veg-nuggets.jpg" },
+        { name: "Chilli Chicken", img: "images/chicken-chilli.jpg", category: "Appetizers" },
+        { name: "Chilli Paneer", img: "images/paneer-chilli.jpg", category: "Appetizers" },
+        { name: "Gobi Manchurian", img: "images/gobi.jpg", category: "Appetizers" },
+        { name: "Veggie burger", price: 110, img: "images/veg-burger.jpg", category: "Appetizers" },
+        { name: "Chicken burger", price: 110, img: "images/chicken-burger.jpg", category: "Appetizers" },
+        { name: "Peri Peri Chicken burger", price: 110, img: "images/chicken-burger.jpg", category: "Appetizers" },
+        { name: "Samosa(6pcs)", price: 110, img: "images/samosa.jpg", category: "Appetizers" },
+        { name: "Jalapeño Cheese Samosa(6pcs)", price: 110, img: "images/jalapeno-samosa.jpg", category: "Appetizers" },
+        { name: "Chicken Cheese Samosa(6pcs)", price: 110, img: "images/chicken-samosa.jpg", category: "Appetizers" },
+        { name: "Clubhouse Sandwich", price: 110, img: "images/club-sandwich.jpg", category: "Appetizers" },
+        { name: "Regal Sandwich", price: 110, img: "images/regal-sandwich.jpg", category: "Appetizers" },
+        { name: "French Fries", price: 90, img: "images/french-fries.jpg", category: "Appetizers" },
+        { name: "Peri Peri French Fries", price: 90, img: "images/french-fries.jpg", category: "Appetizers" },
+        { name: "Cottage Cheese Paneer Sandwich", price: 110, img: "images/paneer-sandwich.jpg", category: "Appetizers" },
+      ],
+      "Pizzeria": [
+      { name: "Margherita Pizza", img: "images/margherita-pizza.jpg", category: "Pizzeria" },
+      { name: "Sweet Corn Pizza", img: "images/sweetcorn-pizza.jpg", category: "Pizzeria" },
+      { name: "Peri Peri Chicken Pizza", img: "images/perichicken-pizza.jpg", category: "Pizzeria" },
+      { name: "Peri Peri Paneer Pizza",img: "images/paneer-pizza.jpg", category: "Pizzeria" },
+      { name: "Mediterranean Pizza", img: "images/mediterranean-pizza.jpg", category: "Pizzeria" },
+      ],
+      "Cold Coffee Brews": [
+        { name: "Cold Coffee", img: "images/cold-coffee.jpg" },
+        { name: "Oreo Shake", img: "images/oreo-shake.jpg" },
+        { name: "Iced Chocolate Coffee", img: "images/choco-coffee.jpg", category: "Cold Brews" },
+      ],
+      "Beverages": [
+        { name: "Lime Soda", img: "images/lime-soda.jpg" },
+        { name: "Mango Smoothie", img: "images/mango-smoothie.jpg" },
+        { name: "Pineapple Smoothie", img: "images/pineapple-smoothie.jpg" },
+        { name: "Blackcurrant Smoothie", img: "images/blackcurrant-smoothie.jpg" },
+        { name: "Mojito", price: 70, img: "images/mojito.jpg", category: "Beverages" },
+      ],
+      "Main Course": [
       { name: "Hakka Noodles(Veg)", price: 60, img: "images/hakka-noodles.jpg", category: "Main Course" },
       { name: "Hakka Noodles(Non-Veg)", price: 60, img: "images/hakka-noodles.jpg", category: "Main Course" },
       { name: "Fried Rice(Veg)", price: 60, img: "images/fried-rice.jpg", category: "Main Course" },
       { name: "Fried Rice(Non-Veg)", price: 60, img: "images/fried-rice.jpg", category: "Main Course" },
       { name: "Fried Rice(Egg)", price: 60, img: "images/fried-rice.jpg", category: "Main Course" },
-
       { name: "Penne Arrabiata Pasta", price: 60, img: "images/penne.jpg", category: "Main Course" },
       { name: "Macaroni Pasta", price: 60, img: "images/macaroni.jpg", category: "Main Course" },
       { name: "Spaghetti Pasta", price: 60, img: "images/spaghetti.jpg", category: "Main Course" },
-
-      { name: "Chicken Nuggets", price: 110, img: "images/chicken-nuggets.jpg", category: "Appetizers" },
-      { name: "Veg Nuggets", price: 110, img: "images/veg-nuggets.jpg", category: "Appetizers" },
-      { name: "Potato Wedges", price: 110, img: "images/potato-wedges.jpg", category: "Appetizers" },
-
-      { name: "Veggie burger", price: 110, img: "images/veg-burger.jpg", category: "Appetizers" },
-      { name: "Chicken burger", price: 110, img: "images/chicken-burger.jpg", category: "Appetizers" },
-      { name: "Peri Peri Chicken burger", price: 110, img: "images/regal-sandwich.jpg", category: "Appetizers" },
-
-      { name: "Chilli Chicken", price: 110, img: "images/chicken-chilli.jpg", category: "Appetizers" },
-      { name: "Chilli Paneer", price: 110, img: "images/paneer-chill.jpg", category: "Appetizers" },
-      { name: "Gobi Manchurian", price: 110, img: "images/gobi.jpg", category: "Appetizers" },
-
-      
-      { name: "Sizzling Brownie", price: 100, img: "images/brownie.jpg", category: "Desserts" },
-      { name: "Brownie With Vanilla Scoop", price: 100, img: "images/sizzling-brownie.jpg", category: "Desserts" },
+      ],
+      "Desserts": [
+        { name: "Brownie", img: "images/brownie.jpg" },
+        { name: "Sizzling Brownie", img: "images/sizzling-brownie.jpg" }
+      ],
+      "Soups": [
+      { name: "Roasted Pumpkin Coconut Soup", price: 60, img: "images/pumpkin-soup.jpg", category: "Soups" },
+      { name: "Cream Broccoli Soup", price: 60, img: "images/broccoli-soup.jpg", category: "Soups" },
+      { name: "Hot & Sour Soup(Veg)", price: 60, img: "images/hotsour-soup.jpg", category: "Soups" },
+      { name: "Hot & Sour Soup(Non-Veg)", price: 60, img: "images/hotsour-soup.jpg", category: "Soups" },
+      { name: "Manchow Soup(Veg)", price: 60, img: "images/manchow-soup.jpg", category: "Soups" },
+      { name: "Manchow Soup(Non-Veg)", price: 60, img: "images/manchow-soup.jpg", category: "Soups" }
+      ],
+      "Icecreams(Scoops)":[
       { name: "Vanilla Scoop", price: 100, img: "images/vanilla-ice.jpg", category: "Icecreams" },
       { name: "Alphonso Mango Scoop", price: 100, img: "images/mango-ice.jpg", category: "Icecreams" },
       { name: "Chocolate Scoop", price: 100, img: "images/choco-ice.jpg", category: "Icecreams" },
       { name: "Butterscotch Scoop", price: 100, img: "images/butterscotch-ice.jpg", category: "Icecreams" }
-    ];
-  
-    const cart = {};
-  
-    // Read table number from URL (e.g., ?table=3)
-    const urlParams = new URLSearchParams(window.location.search);
-    const tableNum = urlParams.get('table') || '—';
-    document.getElementById("tableId").innerText = `Table: ${tableNum}`;
-  
-    function updateQty(itemKey, delta) {
-      cart[itemKey] = (cart[itemKey] || 0) + delta;
-      if (cart[itemKey] < 0) cart[itemKey] = 0;
-      document.getElementById(`qty-${itemKey}`).innerText = cart[itemKey];
-      updateOrderSummary();
+      ]
+
+    };
+
+    let currentCategory = "";
+    const order = [];
+
+    const tableId = new URLSearchParams(window.location.search).get("table");
+    document.getElementById("tableId").textContent = tableId ? `Table No: ${tableId}` : "";
+
+    const categoryButtonsContainer = document.getElementById("categoryButtons");
+    const menuContainer = document.getElementById("menu");
+    const orderSummary = document.getElementById("orderSummary");
+
+    function renderCategoryButtons() {
+      categoryButtonsContainer.innerHTML = "";
+      Object.keys(categories).forEach(cat => {
+        const btn = document.createElement("button");
+        btn.textContent = cat;
+        btn.onclick = () => {
+          currentCategory = cat;
+          renderMenu();
+          document.querySelectorAll(".category-buttons button").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+        };
+        categoryButtonsContainer.appendChild(btn);
+      });
     }
-  
-    function updateOrderSummary() {
-      let summary = '';
-      let total = 0;
-      for (const [key, qty] of Object.entries(cart)) {
-        if (qty > 0) {
-          const item = menuItems[key];
-          summary += `${qty} × ${item.name} = ₹${item.price * qty}\n`;
-          total += item.price * qty;
-        }
-      }
-      document.getElementById('orderSummary').innerText = summary || 'No items added yet.';
-    }
-  
-    function renderMenu(category = "All") {
-      const grid = document.getElementById("menuGrid");
-      grid.innerHTML = "";
-      const filtered = category === "All"
-        ? menuItems
-        : menuItems.filter(item => item.category === category);
-  
-      filtered.forEach(item => {
-        const itemKey = menuItems.indexOf(item); // Keep global index
-        const div = document.createElement("div");
-        div.className = "menu-item";
-        div.innerHTML = `
+
+    function renderMenu() {
+      menuContainer.innerHTML = "";
+      if (!currentCategory) return;
+
+      categories[currentCategory].forEach(item => {
+        const card = document.createElement("div");
+        card.className = "menu-item";
+        card.innerHTML = `
           <img src="${item.img}" alt="${item.name}">
           <h3>${item.name}</h3>
-          <p>₹${item.price}</p>
           <div class="qty-controls">
-            <button onclick="updateQty(${itemKey}, -1)">–</button>
-            <span id="qty-${itemKey}">${cart[itemKey] || 0}</span>
-            <button onclick="updateQty(${itemKey}, 1)">+</button>
+            <button onclick="updateQty('${item.name}', -1)">-</button>
+            <span id="qty-${item.name}">0</span>
+            <button onclick="updateQty('${item.name}', 1)">+</button>
           </div>
         `;
-        grid.appendChild(div);
+        menuContainer.appendChild(card);
       });
     }
-  
-    document.querySelectorAll("#categoryFilters button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll("#categoryFilters button").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        renderMenu(btn.dataset.category);
-      });
-    });
-  
-    document.getElementById('submitOrder').addEventListener('click', () => {
-      const lines = [];
-      let total = 0;
-      for (const [key, qty] of Object.entries(cart)) {
-        if (qty > 0) {
-          const item = menuItems[key];
-          lines.push(`${qty} × ${item.name} — ₹${item.price * qty}`);
-          total += item.price * qty;
+
+    function updateQty(name, delta) {
+      const item = order.find(i => i.name === name);
+      if (item) {
+        item.qty += delta;
+        if (item.qty <= 0) {
+          const index = order.indexOf(item);
+          order.splice(index, 1);
         }
+      } else if (delta > 0) {
+        order.push({ name, qty: 1 });
       }
-  
-      if (!lines.length) return alert('Please add items to your order.');
-  
-      const now = new Date();
-      const formattedTime = now.toLocaleString('en-IN', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
+      document.getElementById(`qty-${name}`).textContent =
+        order.find(i => i.name === name)?.qty || 0;
+      updateSummary();
+    }
+
+    function updateSummary() {
+      if (order.length === 0) {
+        orderSummary.textContent = "";
+        return;
+      }
+
+      let summary = "";
+      order.forEach(item => {
+        summary += `${item.name} x${item.qty}\n`;
       });
-  
-      const summaryText =
-        `🛎️ Order from Regal Café\n📍 Table: ${tableNum}\n\n` +
-        lines.join('\n') +
-        `\n\n💰 Total: ₹${total}\n🗓️ Order placed on: ${formattedTime}`;
-  
-      const w = window.open("", "_blank", "width=400,height=600");
-      w.document.write(`
-        <style>
-          body { font-family: sans-serif; background: #f8f8f8; padding: 20px; color: #111; }
-          pre { white-space: pre-wrap; background: #fff; border: 1px solid #ccc; padding: 12px; border-radius: 8px; }
-          a.button { display: block; margin-top: 15px; background: #25d366; color: white; padding: 10px 20px; text-align: center; border-radius: 8px; font-size: 16px; text-decoration: none; }
-        </style>
-        <h2>Order Summary</h2>
-        <pre>${summaryText}</pre>
-        <a class="button" href="https://wa.me/919864992532?text=${encodeURIComponent(summaryText)}" target="_blank">📲 Send via WhatsApp</a>
-      `);
+      summary += `\nTotal items: ${order.reduce((sum, i) => sum + i.qty, 0)}`;
+      orderSummary.textContent = summary;
+    }
+
+    document.getElementById("submitOrder").addEventListener("click", () => {
+      if (order.length === 0) return alert("No items selected!");
+
+      let message = `*Regal Cafe Order*%0A`;
+      if (tableId) message += `*Table:* ${tableId}%0A`;
+      order.forEach(item => {
+        message += `• ${item.name} x${item.qty}%0A`;
+      });
+      message += `%0ATotal items: ${order.reduce((sum, i) => sum + i.qty, 0)}`;
+
+      const encoded = encodeURI(message);
+      window.open(`https://wa.me/?text=${encoded}`, "_blank");
     });
-  
-    renderMenu();
-  </script>  
+
+    renderCategoryButtons();
+  </script>
 </body>
 </html>

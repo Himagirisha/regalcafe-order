@@ -174,15 +174,19 @@
 document.getElementById("submitOrder").addEventListener("click", () => {
   if (order.length === 0) return alert("No items selected!");
 
-  let message = `*Regal Cafe Order*%0A`;
-  if (tableId) message += `*Table:* ${tableId}%0A`;
+  let message = `🛎️ *New Order - Regal Cafe* 🛎️%0A`;
+  if (tableId) message += `🪑 *Table No:* ${tableId}%0A`;
+  message += `%0A🧾 *Order List:*%0A`;
+
   order.forEach(item => {
-    message += `• ${item.name} x${item.qty}%0A`;
+    message += `• ${item.name} × ${item.qty}%0A`;
   });
-  message += `%0ATotal items: ${order.reduce((sum, i) => sum + i.qty, 0)}`;
+
+  message += `%0A📦 *Total Items:* ${order.reduce((sum, i) => sum + i.qty, 0)}%0A`;
+  message += `%0A📲 _Sent via Scan & Order menu_`;
 
   const encoded = encodeURI(message);
-  window.open(`https://wa.me/919864992532?text=${encoded}`, "_blank"); // Replace with your number
+  window.open(`https://wa.me/919864992532?text=${encoded}`, "_blank");
 });
 
 

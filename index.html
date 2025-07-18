@@ -20,6 +20,8 @@
     <button data-category="Beverages">Beverages</button>
     <button data-category="Main Course">Main Course</button>
     <button data-category="Desserts">Desserts</button>
+    <button data-category="Soups">Desserts</button>
+    <button data-category="Icecreams">Icecreams(Scoops)</button>
   </section>
 
   <main>
@@ -33,14 +35,64 @@
   <script>
     const menuItems = [
       { name: "Cold Coffee", price: 80, img: "images/cold-coffee.jpg", category: "Cold Brews" },
-      { name: "Filter Coffee", price: 60, img: "images/filter-coffee.jpg", category: "Beverages" },
-      { name: "Mango Lassi", price: 50, img: "images/mango-lassi.jpg", category: "Beverages" },
+      { name: "Iced Chocolate Coffee", price: 80, img: "images/choco-coffee.jpg", category: "Cold Brews" },
+      { name: "Mango Smoothie", price: 50, img: "images/mango-smoothie.jpg", category: "Beverages" },
+      { name: "Pineapple Smoothie", price: 50, img: "images/pineapple-smoothie.jpg", category: "Beverages" },
+      { name: "Lime Soda", price: 50, img: "images/lime-soda.jpg", category: "Beverages" },
+      { name: "Black Currant Smoothie", price: 50, img: "images/blackcurrant-smoothie.jpg", category: "Beverages" },
+      { name: "Margherita Pizza", price: 50, img: "images/margherita-pizza.jpg", category: "Pizzeria" },
+      { name: "Sweet Corn Pizza", price: 50, img: "images/sweetcorn-pizza.jpg", category: "Pizzeria" },
+      { name: "Peri Peri Chicken Pizza", price: 50, img: "images/perichicken-pizza.jpg", category: "Pizzeria" },
+      { name: "Peri Peri Paneer Pizza", price: 50, img: "images/paneer-pizza.jpg", category: "Pizzeria" },
+      { name: "mediterranean Pizza", price: 50, img: "images/mediterranean-pizza.jpg", category: "Pizzeria" },
       { name: "Mojito", price: 70, img: "images/mojito.jpg", category: "Beverages" },
       { name: "French Fries", price: 90, img: "images/french-fries.jpg", category: "Appetizers" },
-      { name: "Cheese Sandwich", price: 110, img: "images/sandwich.jpg", category: "Appetizers" },
-      { name: "Paneer Wrap", price: 110, img: "images/wrap.jpg", category: "Appetizers" },
-      { name: "Maggie", price: 60, img: "images/maggi.jpg", category: "Main Course" },
-      { name: "Oreo Shake", price: 100, img: "images/oreo-shake.jpg", category: "Desserts" }
+      { name: "Peri Peri French Fries", price: 90, img: "images/french-fries.jpg", category: "Appetizers" },
+      { name: "Cottage Cheese Paneer Sandwich", price: 110, img: "images/paneer-sandwich.jpg", category: "Appetizers" },
+      { name: "Oreo Shake", price: 100, img: "images/oreo-shake.jpg", category: "Cold Brews" },
+      { name: "CLubhouse Sandwich", price: 110, img: "images/club-sandwich.jpg", category: "Appetizers" },
+      { name: "Regal Sandwich", price: 110, img: "images/regal-sandwich.jpg", category: "Appetizers" },
+
+      { name: "Samosa(6pcs)", price: 110, img: "images/samosa.jpg", category: "Appetizers" },
+      { name: "Jalapeño Cheese Samosa(6pcs)", price: 110, img: "images/jalapeno-samosa.jpg", category: "Appetizers" },
+      { name: "Chicken Cheese Samosa(6pcs)", price: 110, img: "images/chicken-samosa.jpg", category: "Appetizers" },
+      
+      { name: "Roasted Pumpkin Coconut Soup", price: 60, img: "images/pumpkin-soup.jpg", category: "Soups" },
+      { name: "Cream Broccoli Soup", price: 60, img: "images/broccoli-soup.jpg", category: "Soups" },
+      { name: "Hot & Sour Soup(Veg)", price: 60, img: "images/hotsour-soup.jpg", category: "Soups" },
+      { name: "Hot & Sour Soup(Non-Veg)", price: 60, img: "images/hotsour-soup.jpg", category: "Soups" },
+      { name: "Manchow Soup(Veg)", price: 60, img: "images/manchow-soup.jpg", category: "Soups" },
+      { name: "Manchow Soup(Non-Veg)", price: 60, img: "images/manchow-soup.jpg", category: "Soups" },
+
+      { name: "Hakka Noodles(Veg)", price: 60, img: "images/hakka-noodles.jpg", category: "Main Course" },
+      { name: "Hakka Noodles(Non-Veg)", price: 60, img: "images/hakka-noodles.jpg", category: "Main Course" },
+      { name: "Fried Rice(Veg)", price: 60, img: "images/fried-rice.jpg", category: "Main Course" },
+      { name: "Fried Rice(Non-Veg)", price: 60, img: "images/fried-rice.jpg", category: "Main Course" },
+      { name: "Fried Rice(Egg)", price: 60, img: "images/fried-rice.jpg", category: "Main Course" },
+
+      { name: "Penne Arrabiata Pasta", price: 60, img: "images/penne.jpg", category: "Main Course" },
+      { name: "Macaroni Pasta", price: 60, img: "images/macaroni.jpg", category: "Main Course" },
+      { name: "Spaghetti Pasta", price: 60, img: "images/spaghetti.jpg", category: "Main Course" },
+
+      { name: "Chicken Nuggets", price: 110, img: "images/chicken-nuggets.jpg", category: "Appetizers" },
+      { name: "Veg Nuggets", price: 110, img: "images/veg-nuggets.jpg", category: "Appetizers" },
+      { name: "Potato Wedges", price: 110, img: "images/potato-wedges.jpg", category: "Appetizers" },
+
+      { name: "Veggie burger", price: 110, img: "images/veg-burger.jpg", category: "Appetizers" },
+      { name: "Chicken burger", price: 110, img: "images/chicken-burger.jpg", category: "Appetizers" },
+      { name: "Peri Peri Chicken burger", price: 110, img: "images/regal-sandwich.jpg", category: "Appetizers" },
+
+      { name: "Chilli Chicken", price: 110, img: "images/chicken-chilli.jpg", category: "Appetizers" },
+      { name: "Chilli Paneer", price: 110, img: "images/paneer-chill.jpg", category: "Appetizers" },
+      { name: "Gobi Manchurian", price: 110, img: "images/gobi.jpg", category: "Appetizers" },
+
+      
+      { name: "Sizzling Brownie", price: 100, img: "images/brownie.jpg", category: "Desserts" },
+      { name: "Brownie With Vanilla Scoop", price: 100, img: "images/sizzling-brownie.jpg", category: "Desserts" },
+      { name: "Vanilla Scoop", price: 100, img: "images/vanilla-ice.jpg", category: "Icecreams" },
+      { name: "Alphonso Mango Scoop", price: 100, img: "images/mango-ice.jpg", category: "Icecreams" },
+      { name: "Chocolate Scoop", price: 100, img: "images/choco-ice.jpg", category: "Icecreams" },
+      { name: "Butterscotch Scoop", price: 100, img: "images/butterscotch-ice.jpg", category: "Icecreams" }
     ];
   
     const cart = {};
@@ -140,7 +192,7 @@
         </style>
         <h2>Order Summary</h2>
         <pre>${summaryText}</pre>
-        <a class="button" href="https://wa.me/919036120124?text=${encodeURIComponent(summaryText)}" target="_blank">📲 Send via WhatsApp</a>
+        <a class="button" href="https://wa.me/919864992532?text=${encodeURIComponent(summaryText)}" target="_blank">📲 Send via WhatsApp</a>
       `);
     });
   
